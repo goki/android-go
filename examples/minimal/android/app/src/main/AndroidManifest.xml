@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest 
-  xmlns:android="http://schemas.android.com/apk/res/android" package="com.go_android.minimal" android:versionCode="1" android:versionName="1.0">
+  xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0">
+  <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="26"/>
   <application android:hasCode="false">
-    <activity android:name="android.app.NativeActivity" android:label="minimal" android:configChanges="orientation|keyboardHidden">
+    <activity android:name="android.app.NativeActivity" android:label="minimal" android:configChanges="orientation|keyboardHidden" android:exported="true">
       <meta-data android:name="android.app.lib_name" android:value="gomain" />
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
+      <intent-filter android:exported="true">
+        <action android:name="android.intent.action.MAIN" android:exported="true" />
+        <category android:name="android.intent.category.LAUNCHER" android:exported="true" />
       </intent-filter>
     </activity>
   </application>

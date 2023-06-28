@@ -15,7 +15,7 @@ set -ex
 # example of the expected layout and content of the "android" folder
 
 # Set default values if they are not provided by the environment.
-: ${ANDROID_API:=26}
+: ${ANDROID_API:=34}
 : ${ANDROID_HOME:=$HOME/android-sdk}
 : ${ANDROID_NDK_HOME:=$ANDROID_HOME/ndk-bundle}
 export ANDROID_API ANDROID_HOME ANDROID_NDK_HOME
@@ -26,16 +26,17 @@ $ANDROID_HOME/tools/bin/sdkmanager "ndk-bundle"
 
 # Create native android toolchain
 rm -rf android/toolchain
-$ANDROID_NDK_HOME/build/tools/make_standalone_toolchain.py --install-dir=android/toolchain --arch=arm --api=$ANDROID_API  --stl=libc++
+
+# $ANDROID_NDK_HOME/build/tools/make_standalone_toolchain.py --install-dir=android/toolchain --arch=arm64 --api=$ANDROID_API  --stl=libc++
 
 # Build .so
-mkdir -p android/app/src/main/jniLibs/armeabi-v7a
-GOOS=android GOARCH=arm GOARM=7 go get -d
-CC="$PWD/android/toolchain/bin/arm-linux-androideabi-gcc" \
-    CXX="$PWD/android/toolchain/bin/arm-linux-androideabi-g++" \
-    CGO_ENABLED=1 CGO_CFLAGS="-march=armv7-a" \
-    GOOS=android GOARCH=arm GOARM=7 \
-    go build -i -buildmode=c-shared -o android/app/src/main/jniLibs/armeabi-v7a/libgomain.so
+mkdir -p android/app/src/main/jniLibs/arm64-v8a
+GOOS=android GOARCH=arm64 go get -d
+CC="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android30-clang" \
+    CXX="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android30-clang++" \
+    CGO_ENABLED=1 CGO_CFLAGS="-arch arm64" CGO_LDFLAGS="-arch arm64"\
+    GOOS=android GOARCH=arm64 \
+    go build -i -buildmode=c-shared -o android/app/src/main/jniLibs/arm64-v8a/libgomain.so
 
 # Copy assets if there are any
 if [ -d assets ]; then
