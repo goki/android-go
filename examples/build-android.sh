@@ -16,27 +16,46 @@ set -ex
 
 # Set default values if they are not provided by the environment.
 : ${ANDROID_API:=34}
+: ${ANDROID_TOOLCHAIN:=30}
 : ${ANDROID_HOME:=$HOME/android-sdk}
 : ${ANDROID_NDK_HOME:=$ANDROID_HOME/ndk-bundle}
-export ANDROID_API ANDROID_HOME ANDROID_NDK_HOME
+: ${ANDROID_ARCH:=aarch64}
+: ${ANDROID_ARCH_ABI:=arm64-v8a}
+: ${ANDROID_GOARCH:=arm64}
+export ANDROID_API ANDROID_HOME ANDROID_NDK_HOME ANDROID_ARCH ANDROID_ARCH_ABI ANDROID_GOARCH
 
 # Install the ndk
-$ANDROID_HOME/tools/bin/sdkmanager --update
-$ANDROID_HOME/tools/bin/sdkmanager "ndk-bundle"
+# Windows Git Bash
+if [[ "$OSTYPE" == "msys" ]]; then
+    : ${OSNAME:="windows"}
+    $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager.bat --update
+    $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager.bat "ndk-bundle"
+# Everything else (linux, macOS, etc)
+else
+    : ${OSNAME:=$OSTYPE}
+    $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --update
+    $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk-bundle"
+fi
 
-# Create native android toolchain
-rm -rf android/toolchain
+
+# # Create native android toolchain
+# rm -rf android/toolchain
 
 # $ANDROID_NDK_HOME/build/tools/make_standalone_toolchain.py --install-dir=android/toolchain --arch=arm64 --api=$ANDROID_API  --stl=libc++
 
+USE_CGO_FLAGS=""
+if [[ "$ANDROID_GOARCH" == "arm64" ]]; then
+    USE_CGO_FLAGS="-arch arm64"
+fi
+
 # Build .so
-mkdir -p android/app/src/main/jniLibs/arm64-v8a
-GOOS=android GOARCH=arm64 go get -d
-CC="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android30-clang" \
-    CXX="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android30-clang++" \
-    CGO_ENABLED=1 CGO_CFLAGS="-arch arm64" CGO_LDFLAGS="-arch arm64"\
-    GOOS=android GOARCH=arm64 \
-    go build -i -buildmode=c-shared -o android/app/src/main/jniLibs/arm64-v8a/libgomain.so
+mkdir -p android/app/src/main/jniLibs/$ANDROID_ARCH_ABI
+GOOS=android GOARCH=$ANDROID_GOARCH go get -d
+CC="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/$OSNAME-x86_64/bin/$ANDROID_ARCH-linux-android$ANDROID_TOOLCHAIN-clang" \
+    CXX="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/$OSNAME-x86_64/bin/$ANDROID_ARCH-linux-android$ANDROID_TOOLCHAIN-clang++" \
+    CGO_ENABLED=1 CGO_CFLAGS=$USE_CGO_FLAGS CGO_LDFLAGS=$USE_CGO_FLAGS \
+    GOOS=android GOARCH=$ANDROID_GOARCH \
+    go build -i -buildmode=c-shared -o android/app/src/main/jniLibs/$ANDROID_ARCH_ABI/libgomain.so
 
 # Copy assets if there are any
 if [ -d assets ]; then

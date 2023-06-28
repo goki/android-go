@@ -9,8 +9,9 @@ android {
         minSdkVersion 23
         targetSdkVersion 34
         ndk {
-            abiFilters 'arm64-v8a'
-            // x86', 'armeabi'
+            abiFilters 'arm64-v8a' // arm64
+            // abiFilters 'x86_64' // amd64
+            // abiFilters 'armeabi' // arm32 (or arm64 v<8)
         }
     }
     buildTypes {
