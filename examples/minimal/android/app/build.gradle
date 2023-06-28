@@ -12,8 +12,8 @@ android {
             // The abiFilters set here determine for what platforms the apk is actually built. 
             // You should use whatever platform you are on while developing, and then all platforms 
             // you want to support for when you actually release.
-            abiFilters 'arm64-v8a' // arm64
-            // abiFilters 'x86_64' // amd64
+            // abiFilters 'arm64-v8a' // arm64
+            abiFilters 'x86_64' // amd64
             // abiFilters 'armeabi' // arm32 (or arm64 v<8)
         }
     }

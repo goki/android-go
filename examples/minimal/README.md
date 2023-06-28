@@ -1,6 +1,8 @@
 Minimal Go app
 ==============
 
+**Note:** This is no longer really a minimal Go app, as it has been converted to a Vulkan example. At some point in the future, the Vulkan example should be relocated and this should become a minimal example again. The reason that the Vulkan example was made here is that the build scripts weren't working in [vulkan-go/demos](https://github.com/vulkan-go/demos), but the code here is mostly the same as the code in the vulkancube\_android example.
+
 This is a simple Android Go app template.
 
 ### Prerequisites
