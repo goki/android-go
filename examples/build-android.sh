@@ -12,7 +12,11 @@ set -ex
 # This script should be called from the folder containing the go source code, which in turn is expected to contain a folder called
 # "android" with gradle files and the manifest. The native toolchain, go shared libray, assets and final apks will be copied into
 # or created in this folder and it's subfolders. See the examples at (https://github.com/xlab/android-go/tree/master/examples) for
-# example of the expected layout and content of the "android" folder
+# example of the expected layout and content of the "android" folder.
+
+# The ANDROID_ARCH, ANDROIND_ARCH_ABI, and ANDROID_GOARCH variables determine for what platform the libraries are built. 
+# To build for multiple platforms, run this script once for each platform with the appropriate values for those variables. 
+# Then set all of those platforms as abiFilters in app/build.gradle and build the app again.
 
 # Set default values if they are not provided by the environment.
 : ${ANDROID_API:=34}
