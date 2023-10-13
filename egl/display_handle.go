@@ -45,14 +45,14 @@ func (d *DisplayHandle) Destroy() {
 // NewDisplayHandle initializes EGL display/surface/context and returns a handle object or error.
 // Use expectedConfig to specify the desired EGL config constraints like:
 //
-//  map[int32]int32{
-//  	egl.SurfaceType: egl.WindowBit,
-//  	egl.RedSize:   8,
-//  	egl.GreenSize: 8,
-//  	egl.BlueSize:  8,
-//  	egl.AlphaSize: 8,
-//  	egl.DepthSize: 24,
-//  }
+//	map[int32]int32{
+//		egl.SurfaceType: egl.WindowBit,
+//		egl.RedSize:   8,
+//		egl.GreenSize: 8,
+//		egl.BlueSize:  8,
+//		egl.AlphaSize: 8,
+//		egl.DepthSize: 24,
+//	}
 func NewDisplayHandle(window *android.NativeWindow, expectedConfig map[int32]int32) (*DisplayHandle, error) {
 	display := GetDisplay(DefaultDisplay)
 	if Initialize(display, nil, nil) == False {

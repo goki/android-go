@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This program creates a 1MB file whose bytes set to o%256, where o is the offset of the byte in the file, starting with 0.

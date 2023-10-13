@@ -203,21 +203,23 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"templates/build.xml.tpl": templatesBuildXmlTpl,
-	"templates/local.properties.tpl": templatesLocalPropertiesTpl,
+	"templates/build.xml.tpl":            templatesBuildXmlTpl,
+	"templates/local.properties.tpl":     templatesLocalPropertiesTpl,
 	"templates/proguard-project.txt.tpl": templatesProguardProjectTxtTpl,
-	"templates/project.properties.tpl": templatesProjectPropertiesTpl,
+	"templates/project.properties.tpl":   templatesProjectPropertiesTpl,
 }
 
 // AssetDir returns the file names below a certain
 // directory embedded in the file by go-bindata.
 // For example if you run go-bindata on data/... and data contains the
 // following hierarchy:
-//     data/
-//       foo.txt
-//       img/
-//         a.png
-//         b.png
+//
+//	data/
+//	  foo.txt
+//	  img/
+//	    a.png
+//	    b.png
+//
 // then AssetDir("data") would return []string{"foo.txt", "img"}
 // AssetDir("data/img") would return []string{"a.png", "b.png"}
 // AssetDir("foo.txt") and AssetDir("notexist") would return an error
@@ -248,12 +250,13 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"templates": &bintree{nil, map[string]*bintree{
-		"build.xml.tpl": &bintree{templatesBuildXmlTpl, map[string]*bintree{}},
-		"local.properties.tpl": &bintree{templatesLocalPropertiesTpl, map[string]*bintree{}},
+		"build.xml.tpl":            &bintree{templatesBuildXmlTpl, map[string]*bintree{}},
+		"local.properties.tpl":     &bintree{templatesLocalPropertiesTpl, map[string]*bintree{}},
 		"proguard-project.txt.tpl": &bintree{templatesProguardProjectTxtTpl, map[string]*bintree{}},
-		"project.properties.tpl": &bintree{templatesProjectPropertiesTpl, map[string]*bintree{}},
+		"project.properties.tpl":   &bintree{templatesProjectPropertiesTpl, map[string]*bintree{}},
 	}},
 }}
 
@@ -303,4 +306,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-
